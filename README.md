@@ -1,51 +1,87 @@
-# 📘 Student Report Card Management System
+# Student Report Card Management System
 
-A console-based C++ application for managing student academic records, including marks, grades, and reports, using file handling with binary files.
+A console-based C++ application for managing student academic records — marks, grades, and report cards — with binary file persistence.
 
 ---
 
-## 📌 Features
+## Features
 
 - Add new student records
 - Display all student records
 - Search for a student by roll number
 - Modify an existing student record
 - Delete a student record
-- Generate class-wise grade report
-- Generate individual student report card
-- Simple menu-driven user interface
+- View class-wide grade report (tabular)
+- View individual student report card
+- Input validation: marks enforced in range 0–100, roll numbers must be positive
 
 ---
 
-## 🛠️ Technologies Used
+## Tech Stack
 
-- **Language:** C++
-- **File Handling:** Binary file operations (`fstream`)
-- **Console I/O:** `cin`, `cout`, `clrscr`, `getch`
-- **Legacy Headers:** `<iostream.h>`, `<fstream.h>`, `<conio.h>` *(Use a compatible compiler like Turbo C++ or adapt for modern compilers)*
+- **Language:** C++ (standard C++11 or later)
+- **File handling:** Binary file I/O via `<fstream>`
+- **I/O:** `<iostream>`, `<iomanip>`
+- **Build tool:** Any modern C++ compiler (`g++`, `clang++`, MSVC)
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Requirements
 
-- Turbo C++ or DOSBox (for legacy header compatibility)
-- Or, for modern systems:
-  - Replace old headers with `#include <iostream>`, `#include <fstream>`, etc.
-  - Remove `clrscr()` and `getch()` or replace with standard equivalents
+- A C++11-compatible compiler (`g++`, `clang++`, or MSVC)
+- Linux, macOS, or Windows
 
-### Compilation
+### Compile
 
-For Turbo C++:
 ```bash
-Open Turbo C++ > Open Project > Compile (Alt + F9) > Run (Ctrl + F9)
+g++ -std=c++11 -o student_report schoolproject.cpp
 ```
-For modern compilers (like g++), you may need to modify the code:
+
+### Run
+
 ```bash
-g++ -o student_report student.cpp
 ./student_report
 ```
-### Contribution
-Let me know if you’d like a version tailored for **modern C++ (like `g++`)** or you plan to run this project on **Windows/macOS/Linux** without Turbo C++.
 
+---
+
+## Usage
+
+On launch you will see the **Main Menu**:
+
+```
+MAIN MENU
+
+  01. RESULT MENU
+  02. ENTRY/EDIT MENU
+  03. EXIT
+```
+
+| Menu | Options |
+|---|---|
+| Result Menu | Class Result, Student Report Card |
+| Entry/Edit Menu | Create, Display All, Search, Modify, Delete |
+
+Student data is stored in `student.dat` in the working directory and persists between runs.
+
+---
+
+## Grading Scale
+
+| Grade | Percentage |
+|---|---|
+| A | 60% and above |
+| B | 50% – 59% |
+| C | 33% – 49% |
+| F | Below 33% |
+
+Percentage is the average of five subjects: Physics, Chemistry, Maths, English, and Computer Science.
+
+---
+
+## Project Info
+
+**Authors:** Hamza Ahmed Khan & Aaditya Senthilkumar  
+**School:** DPS-Modern Indian School
