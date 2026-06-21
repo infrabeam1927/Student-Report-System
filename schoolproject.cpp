@@ -1,140 +1,159 @@
 //************************************************
-//                   HEADER FILE USED IN PROJECT
+//                   HEADER FILES USED IN PROJECT
 //***********************************************
 
-#include<fstream.h>
-#include<iostream.h>
-#include<iomanip.h>
-#include<stdio.h>
-#include<conio.h>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <limits>
 
+using namespace std;
 
-//************************************************//                   CLASS USED IN PROJECT
+void clrscr() { system("clear"); }
+
+void pause()
+{
+    cout << "\n\tPress Enter to continue...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.get();
+}
+
 //************************************************
+//                   CLASS USED IN PROJECT
+//************************************************
+
 class student
 {
   private:
-	int rollno;
-	char name[50];
-	int p_marks, c_marks, m_marks, e_marks, cs_marks;
-	float per;
-	char grade;
-	void calculate();//function to calculate grade
-  public: 
-	void getdata() //function to accept data from user
-	void showdata(); //function to show data on screen
-	void show_tabular();
-	int retrollno();
-}; 
-//class ends here
+    int rollno;
+    char name[50];
+    int p_marks, c_marks, m_marks, e_marks, cs_marks;
+    float per;
+    char grade;
+    void calculate();
+  public:
+    void getdata();
+    void showdata();
+    void show_tabular();
+    int retrollno();
+};
 
 void student::calculate()
 {
-	per=(p_marks+c_marks+m_marks+e_marks+cs_marks)/5.0;
-	if(per>=60)
-		grade='A';
-	else if(per>=50)
-		grade='B';
-	else if(per>=33)
-		grade='C';
-	else
-		grade='F';
+    per = (p_marks + c_marks + m_marks + e_marks + cs_marks) / 5.0;
+    if (per >= 60)      grade = 'A';
+    else if (per >= 50) grade = 'B';
+    else if (per >= 33) grade = 'C';
+    else                grade = 'F';
+}
+
+static int readMark(const char* subject)
+{
+    int val;
+    while (true) {
+        cout << "\nEnter marks in " << subject << " (0-100): ";
+        if (cin >> val && val >= 0 && val <= 100) break;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "  Invalid! Marks must be between 0 and 100.\n";
+    }
+    return val;
 }
 
 void student::getdata()
 {
-	cout<<"\nEnter The roll number of student ";
-	cin>>rollno;
-	cout<<"\n\nEnter The Name of student ";
-	gets(name);
-	cout<<"\nEnter The marks in physics out of 100 : ";
-	cin>>p_marks;
-	cout<<"\nEnter The marks in chemistry out of 100 : ";
-	cin>>c_marks;
-	cout<<"\nEnter The marks in maths out of 100 : ";
-	cin>>m_marks;
-	cout<<"\nEnter The marks in english out of 100 : ";
-	cin>>e_marks;
-	cout<<"\nEnter The marks in computer out of 100: ";
-	cin>>cs_marks;
-	calculate();
+    cout << "\nEnter roll number: ";
+    while (!(cin >> rollno) || rollno <= 0) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "  Invalid! Enter a positive integer: ";
+    }
+    cin.ignore();
+    cout << "Enter student name: ";
+    cin.getline(name, 50);
+
+    p_marks  = readMark("Physics");
+    c_marks  = readMark("Chemistry");
+    m_marks  = readMark("Maths");
+    e_marks  = readMark("English");
+    cs_marks = readMark("Computer Science");
+    calculate();
 }
 
 void student::showdata()
 {
-	cout<<"\nRoll number of student : "<<rollno;
-	cout<<"\nName of student : "<<name;
-	cout<<"\nMarks in Physics : "<<p_marks;
-	cout<<"\nMarks in Chemistry : "<<c_marks;
-	cout<<"\nMarks in Maths : "<<m_marks;
-	cout<<"\nMarks in English : "<<e_marks;
-	cout<<"\nMarks in Computer Science :"<<cs_marks;
-	cout<<"\nPercentage of student is  :"<<per;
-	cout<<"\nGrade of student is :"<<grade;
+    cout << "\nRoll Number     : " << rollno;
+    cout << "\nName            : " << name;
+    cout << "\nPhysics         : " << p_marks;
+    cout << "\nChemistry       : " << c_marks;
+    cout << "\nMaths           : " << m_marks;
+    cout << "\nEnglish         : " << e_marks;
+    cout << "\nComputer Science: " << cs_marks;
+    cout << "\nPercentage      : " << fixed << setprecision(2) << per << "%";
+    cout << "\nGrade           : " << grade;
 }
 
 void student::show_tabular()
 {
-	cout<<rollno<<setw(6)<<" "<<name<<setw(10)<<p_marks<<setw(4)<<c_marks<<setw(4)<<
-m_marks<<setw(4)<<e_marks<<setw(4)<<cs_marks<<setw(6)<<per<<setw(6)<<" "<<grade<<endl;
+    cout << left
+         << setw(6)  << rollno
+         << setw(20) << name
+         << setw(5)  << p_marks
+         << setw(5)  << c_marks
+         << setw(5)  << m_marks
+         << setw(5)  << e_marks
+         << setw(5)  << cs_marks
+         << setw(9)  << fixed << setprecision(1) << per
+         << grade << "\n";
 }
 
-int  student::retrollno()
+int student::retrollno()
 {
-	return rollno;
+    return rollno;
 }
 
 
 //**********************************************************
-//    	function declaration
+//    	function declarations
 //**********************************************************
 
-
-void write_student();//write the record in binary file
-void display_all();//read all records from binary file
-void display_sp(int);//accept rollno and read record from binary file
-void modify_student(int);//accept rollno and update record of binary file
-void delete_student(int);//accept rollno and delete selected records from binary file
-void class_result();//display all records in tabular format from binary file
-void result();//display result menu
-void intro();//display welcome screen
-void entry_menu();//display entry menu on screen
+void write_student();
+void display_all();
+void display_sp(int);
+void modify_student(int);
+void delete_student(int);
+void class_result();
+void result();
+void intro();
+void entry_menu();
 
 
 //**********************************************************
 //    	THE MAIN FUNCTION OF PROGRAM
 //**********************************************************
 
-
-
 int main()
 {
-	char ch;
-	cout<<setprecision(2);// program outputs decimal number to two decimal places
-	clrscr();
-	intro();
-	do
-	{
-		clrscr();
-		cout<<"\n\n\n\tMAIN MENU";
-		cout<<"\n\n\t01. RESULT MENU";
-		cout<<"\n\n\t02. ENTRY/EDIT MENU";
-		cout<<"\n\n\t03. EXIT";
-		cout<<"\n\n\tPlease Select Your Option (1-3) ";
-		cin>>ch;
-		clrscr();
-		switch(ch)
-		{
-			case '1': result();
-				break;
-			case '2': entry_menu();
-				break;
-			case '3':
-				break;
-			default :cout<<"\a";
-		}
-    	}while(ch!='3');
-	return 0;
+    char ch;
+    intro();
+    do {
+        clrscr();
+        cout << "\n\n\n\tMAIN MENU";
+        cout << "\n\n\t01. RESULT MENU";
+        cout << "\n\n\t02. ENTRY/EDIT MENU";
+        cout << "\n\n\t03. EXIT";
+        cout << "\n\n\tPlease Select Your Option (1-3) ";
+        cin >> ch;
+        clrscr();
+        switch (ch) {
+            case '1': result();     break;
+            case '2': entry_menu(); break;
+            case '3': break;
+            default:  cout << "\a";
+        }
+    } while (ch != '3');
+    return 0;
 }
 
 //**********************************************************
@@ -143,15 +162,19 @@ int main()
 
 void write_student()
 {
-	student st;
-	ofstream fout;
-	fout.open("student.dat",ios::binary|ios::app);
-	st.getdata();
-	fout.write((char *)&st, sizeof(student));
-	fout.close();
-    	cout<<"\n\nStudent record Has Been Created ";
-	cin.ignore();
-	getch();
+    student st;
+    ofstream fout;
+    fout.open("student.dat", ios::binary | ios::app);
+    if (!fout) {
+        cout << "File could not be opened!";
+        pause();
+        return;
+    }
+    st.getdata();
+    fout.write((char *)&st, sizeof(student));
+    fout.close();
+    cout << "\n\nStudent record has been created.";
+    pause();
 }
 
 //**********************************************************
@@ -160,23 +183,24 @@ void write_student()
 
 void display_all()
 {
-	student st;
-	ifstream fin;
-	fin.open("student.dat",ios::binary);
-	if(!fin)
-	{
-		cout<<"File could not be open !! Press any Key...";
-		getch();
-		return;
-	}
-	cout<<"\n\n\n\t\tDISPLAY ALL RECORD !!!\n\n";
-	while(fin.read((char *)&st, sizeof(student)))
-	{
-		st.showdata();
-		cout<<"\n\n====================================\n";
-	}
-	fin.close();
-	getch();
+    student st;
+    ifstream fin;
+    fin.open("student.dat", ios::binary);
+    if (!fin) {
+        cout << "File could not be opened!";
+        pause();
+        return;
+    }
+    cout << "\n\n\n\t\tDISPLAY ALL RECORDS\n\n";
+    bool any = false;
+    while (fin.read((char *)&st, sizeof(student))) {
+        st.showdata();
+        cout << "\n\n====================================\n";
+        any = true;
+    }
+    if (!any) cout << "\tNo records found.\n";
+    fin.close();
+    pause();
 }
 
 //**********************************************************
@@ -185,29 +209,25 @@ void display_all()
 
 void display_sp(int n)
 {
-	student st;
-	ifstream fin;
-	fin.open("student.dat",ios::binary);
-	if(!fin)
-	{
-		cout<<"File could not be open !! Press any Key...";
-		getch();
-		return;
-	}
-
-	int flag=0;
-	while(fin.read((char *)&st, sizeof(student)))
-	{
-		if(st.retrollno()==n)
-		{
-			 st.showdata();
-			 flag=1;
-		}
-	}
-	fin.close();
-	if(flag==0)
-		cout<<"\n\nrecord does not exist";
-	getch();
+    student st;
+    ifstream fin;
+    fin.open("student.dat", ios::binary);
+    if (!fin) {
+        cout << "File could not be opened!";
+        pause();
+        return;
+    }
+    bool found = false;
+    while (fin.read((char *)&st, sizeof(student))) {
+        if (st.retrollno() == n) {
+            st.showdata();
+            found = true;
+        }
+    }
+    fin.close();
+    if (!found)
+        cout << "\n\nRecord not found.";
+    pause();
 }
 
 //**********************************************************
@@ -216,34 +236,31 @@ void display_sp(int n)
 
 void modify_student(int n)
 {
-	int found=0;
-	student st;
-	fstream File;
-	File.open("student.dat",ios::binary|ios::in|ios::out);
-	if(!File)
-	{
-		cout<<"File could not be open !! Press any Key...";
-		getch();
-		return;
-	}
-	while(File.read((char *)&st, sizeof(student)) && found==0)
-	{
-		if(st.retrollno()==n)
-		{
-			st.showdata();
-			cout<<"\n\nPlease Enter The New Details of student"<<endl;
-			st.getdata();
-		    	int pos=(-1)*sizeof(st);
-		    	File.seekp(pos,ios::cur);
-		    	File.write((char *)&st, sizeof(student));
-		    	cout<<"\n\n\t Record Updated";
-		    	found=1;
-		}
-	}
-	File.close();
-	if(found==0)
-		cout<<"\n\n Record Not Found ";
-	getch();
+    bool found = false;
+    student st;
+    fstream File;
+    File.open("student.dat", ios::binary | ios::in | ios::out);
+    if (!File) {
+        cout << "File could not be opened!";
+        pause();
+        return;
+    }
+    while (File.read((char *)&st, sizeof(student)) && !found) {
+        if (st.retrollno() == n) {
+            st.showdata();
+            cout << "\n\nEnter new details:\n";
+            st.getdata();
+            int pos = -1 * (int)sizeof(st);
+            File.seekp(pos, ios::cur);
+            File.write((char *)&st, sizeof(student));
+            cout << "\n\n\tRecord updated.";
+            found = true;
+        }
+    }
+    File.close();
+    if (!found)
+        cout << "\n\nRecord not found.";
+    pause();
 }
 
 //**********************************************************
@@ -252,34 +269,33 @@ void modify_student(int n)
 
 void delete_student(int n)
 {
-	student st;
-	ifstream fin;
-	fin.open("student.dat",ios::binary);
-	if(!fin)
-	{
-		cout<<"File could not be open !! Press any Key...";
-		getch();
-		return;
-	}
-	ofstream fout;
-	fout.open("Temp.dat",ios::out);
-	fin.seekg(0,ios::beg);
-	while(fin.read((char *)&st, sizeof(student)))
-	{
-		if(st.retrollno()!=n)
-		{
-			fout.write((char *)&st, sizeof(student));
-		}
-	}
-	fout.close();
-	fin.close();
-	remove("student.dat");
-	rename("Temp.dat","student.dat");
-	cout<<"\n\n\tRecord Deleted ..";
-	getch();
+    student st;
+    ifstream fin;
+    fin.open("student.dat", ios::binary);
+    if (!fin) {
+        cout << "File could not be opened!";
+        pause();
+        return;
+    }
+    ofstream fout;
+    fout.open("Temp.dat", ios::binary | ios::out);
+    bool found = false;
+    while (fin.read((char *)&st, sizeof(student))) {
+        if (st.retrollno() != n)
+            fout.write((char *)&st, sizeof(student));
+        else
+            found = true;
+    }
+    fout.close();
+    fin.close();
+    remove("student.dat");
+    rename("Temp.dat", "student.dat");
+    if (found)
+        cout << "\n\n\tRecord deleted.";
+    else
+        cout << "\n\n\tRecord not found.";
+    pause();
 }
-
-
 
 //**********************************************************
 //    	function to display all students grade report
@@ -287,50 +303,58 @@ void delete_student(int n)
 
 void class_result()
 {
-	student st;
-	ifstream fin;
-	fin.open("student.dat",ios::binary);
-	if(!fin)
-	{
-		cout<<"File could not be open !! Press any Key...";
-		getch();
-		return;
-	}
-	cout<<"\n\n\t\tALL STUDENTS RESULT \n\n";
-	cout<<"==========================================================\n";
-	cout<<"R.No       Name        P   C   M   E   CS   %age   Grade"<<endl;
-	cout<<"==========================================================\n";
-	while(fin.read((char *)&st, sizeof(student)))
-	{
-		st.show_tabular();
-	}
-	getch();
-	fin.close();
+    student st;
+    ifstream fin;
+    fin.open("student.dat", ios::binary);
+    if (!fin) {
+        cout << "File could not be opened!";
+        pause();
+        return;
+    }
+    cout << "\n\n\t\tALL STUDENTS RESULT\n\n";
+    cout << string(65, '=') << "\n";
+    cout << left
+         << setw(6)  << "R.No"
+         << setw(20) << "Name"
+         << setw(5)  << "P"
+         << setw(5)  << "C"
+         << setw(5)  << "M"
+         << setw(5)  << "E"
+         << setw(5)  << "CS"
+         << setw(9)  << "%age"
+         << "Grade\n";
+    cout << string(65, '=') << "\n";
+    while (fin.read((char *)&st, sizeof(student)))
+        st.show_tabular();
+    fin.close();
+    pause();
 }
 
 //**********************************************************
 //    	function to display result menu
 //**********************************************************
+
 void result()
 {
-	char ch;
-	int rno;
-	cout<<"\n\n\n\tRESULT MENU";
-	cout<<"\n\n\n\t1. Class Result";
-	cout<<"\n\n\t2. Student Report Card";
-	cout<<"\n\n\t3. Back to Main Menu";
-	cout<<"\n\n\n\tEnter Choice (1/2/3)? ";
-	cin>>ch;
-	clrscr();
-	switch(ch)
-	{
-	case '1' :class_result(); break;
-	case '2' :cout<<"\n\n\tEnter Roll Number Of Student : ";
-		  cin>>rno;
-		  display_sp(rno); break;
-	case '3' :break;
-	default :cout<<"\a";
-	}
+    char ch;
+    int rno;
+    cout << "\n\n\n\tRESULT MENU";
+    cout << "\n\n\n\t1. Class Result";
+    cout << "\n\n\t2. Student Report Card";
+    cout << "\n\n\t3. Back to Main Menu";
+    cout << "\n\n\n\tEnter Choice (1/2/3)? ";
+    cin >> ch;
+    clrscr();
+    switch (ch) {
+        case '1': class_result(); break;
+        case '2':
+            cout << "\n\n\tEnter Roll Number: ";
+            cin >> rno;
+            display_sp(rno);
+            break;
+        case '3': break;
+        default:  cout << "\a";
+    }
 }
 
 //**********************************************************
@@ -339,12 +363,13 @@ void result()
 
 void intro()
 {
-	cout<<"\n\n\n\t\t  STUDENT";
-	cout<<"\n\n\t\tREPORT CARD";
-	cout<<"\n\n\t\t  PROJECT";
-	cout<<"\n\n\n\tMADE BY : HAMZA AHMED KHAN AND AADITYA SENTHILKUMAR";
-	cout<<"\n\tSCHOOL : DPS-MODERN INDIAN SCHOOL";
-	getch();
+    clrscr();
+    cout << "\n\n\n\t\t  STUDENT";
+    cout << "\n\n\t\tREPORT CARD";
+    cout << "\n\n\t\t  PROJECT";
+    cout << "\n\n\n\tMADE BY : HAMZA AHMED KHAN AND AADITYA SENTHILKUMAR";
+    cout << "\n\tSCHOOL : DPS-MODERN INDIAN SCHOOL";
+    pause();
 }
 
 //**********************************************************
@@ -353,35 +378,42 @@ void intro()
 
 void entry_menu()
 {
-	char ch;
-	int num;
-	clrscr();
-	cout<<"\n\n\n\tENTRY MENU";
-	cout<<"\n\n\t1.CREATE STUDENT RECORD";
-	cout<<"\n\n\t2.DISPLAY ALL STUDENTS RECORDS";
-	cout<<"\n\n\t3.SEARCH STUDENT RECORD ";
-	cout<<"\n\n\t4.MODIFY STUDENT RECORD";
-	cout<<"\n\n\t5.DELETE STUDENT RECORD";
-	cout<<"\n\n\t6.BACK TO MAIN MENU";
-	cout<<"\n\n\tPlease Enter Your Choice (1-6) ";
-	cin>>ch;
-	clrscr();
-	switch(ch)
-	{
-	case '1':	write_student(); break;
-	case '2':	display_all(); break;
-	case '3':	cout<<"\n\n\tPlease Enter The roll number "; cin>>num;
-			display_sp(num); break;
-	case '4':	cout<<"\n\n\tPlease Enter The roll number "; cin>>num;
-			modify_student(num);break;
-	case '5':	cout<<"\n\n\tPlease Enter The roll number "; cin>>num;
-			delete_student(num);break;
-	case '6':	break;
-	default:	cout<<"\a"; entry_menu();
-	}
+    char ch;
+    int num;
+    clrscr();
+    cout << "\n\n\n\tENTRY MENU";
+    cout << "\n\n\t1. CREATE STUDENT RECORD";
+    cout << "\n\n\t2. DISPLAY ALL STUDENTS RECORDS";
+    cout << "\n\n\t3. SEARCH STUDENT RECORD";
+    cout << "\n\n\t4. MODIFY STUDENT RECORD";
+    cout << "\n\n\t5. DELETE STUDENT RECORD";
+    cout << "\n\n\t6. BACK TO MAIN MENU";
+    cout << "\n\n\tPlease Enter Your Choice (1-6) ";
+    cin >> ch;
+    clrscr();
+    switch (ch) {
+        case '1': write_student(); break;
+        case '2': display_all(); break;
+        case '3':
+            cout << "\n\n\tEnter Roll Number: ";
+            cin >> num;
+            display_sp(num);
+            break;
+        case '4':
+            cout << "\n\n\tEnter Roll Number: ";
+            cin >> num;
+            modify_student(num);
+            break;
+        case '5':
+            cout << "\n\n\tEnter Roll Number: ";
+            cin >> num;
+            delete_student(num);
+            break;
+        case '6': break;
+        default:  cout << "\a"; entry_menu();
+    }
 }
 
 //**********************************************************
 //    			END OF PROJECT
 //**********************************************************
-
